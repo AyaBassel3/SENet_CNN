@@ -30,32 +30,33 @@ callback = ModelCheckpoint(
     mode='max',
     save_best_only=True)
 
-dim = 200
+dim = 170
 
 test_data, test_labels = read_dataset('test', dim)
 train_data, train_labels = read_dataset('train', dim)
 test_data = test_data.reshape(-1, dim, dim, 1) - 0.5
 train_data = train_data.reshape(-1, dim, dim, 1) - 0.5
 
-filters = 180
+filters = 170
 s = tf.keras.Input(shape=test_data.shape[1:])
-x = RandomRotation(0.05)(s)
-x = RandomWidth(0.1)(x)
-x = RandomHeight(0.1)(x)
+x = RandomRotation(0.1)(s)
+x = RandomWidth(0.15)(x)
+x = RandomHeight(0.15)(x)
+x = RandomZoom(-0.2)(x)
 x = Conv2D(filters, 3, activation='relu', padding='same')(x)
 x = Conv2D(filters, 3, activation='relu', padding='same')(x)
 x = Conv2D(filters, 3, activation='relu', padding='same')(x)
 x = BatchNormalization()(x)
 x = squeeze_excite_block2D(filters, x)
-x = Conv2D(filters, 3, activation='relu', padding='same')(x)
-x = Conv2D(filters, 3, activation='relu', padding='same')(x)
-x = Conv2D(filters, 3, activation='relu', padding='same')(x)
+x = Conv2D(filters, 3, activation='relu', padding='same', dilation_rate = (1,1))(x)
+x = Conv2D(filters, 3, activation='relu', padding='same', dilation_rate = (1,1))(x)
+x = Conv2D(filters, 3, activation='relu', padding='same', dilation_rate = (1,1))(x)
 x = BatchNormalization()(x)
 x = squeeze_excite_block2D(filters, x)
 x = tf.keras.layers.AveragePooling2D(2)(x)
-x = Conv2D(filters, 3, activation='relu', padding='same')(x)
-x = Conv2D(filters, 3, activation='relu', padding='same')(x)
-x = Conv2D(filters, 3, activation='relu', padding='same')(x)
+x = Conv2D(filters, 3, activation='relu', padding='same', dilation_rate = (3,3))(x)
+x = Conv2D(filters, 3, activation='relu', padding='same', dilation_rate = (3,3))(x)
+x = Conv2D(filters, 3, activation='relu', padding='same', dilation_rate = (3,3))(x)
 x = BatchNormalization()(x)
 x = squeeze_excite_block2D(filters, x)
 x = tf.keras.layers.AveragePooling2D(2)(x)
