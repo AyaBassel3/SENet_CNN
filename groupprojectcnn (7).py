@@ -16,8 +16,8 @@ from sklearn.model_selection import KFold
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 dim=224
-train_directory = './data/train'
-test_directory = './data/test'
+train_directory = '/home/pg2022/SENet_CNN/data/data/train'
+test_directory = '/home/pg2022/SENet_CNN/data/data/test'
 
 # Create separate instances of ImageDataGenerator for train and test data
 train_datagen = ImageDataGenerator(
@@ -132,8 +132,8 @@ print (scores)
 model.compile()
 model.save("./fullDenseNetmodel.keras")
 
-train_directory = './data/train'
-test_directory = './data/test'
+train_directory = '/home/pg2022/SENet_CNN/data/data/train'
+test_directory = '/home/pg2022/SENet_CNN/data/data/test'
 
 # Create separate instances of ImageDataGenerator for train and test data
 train_datagen = ImageDataGenerator(
