@@ -15,7 +15,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import KFold
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-
+dim=224
 train_directory = './data/train'
 test_directory = './data/test'
 
@@ -35,14 +35,14 @@ test_datagen = ImageDataGenerator(rescale=1.0/255.0)
 # Use the generators to load and preprocess train and test images
 train_generator = train_datagen.flow_from_directory(
     train_directory,
-    target_size=(200, 200),
+    target_size=(dim, dim),
     batch_size=32,
     class_mode='categorical'
 )
 
 test_generator = test_datagen.flow_from_directory(
     test_directory,
-    target_size=(200, 200),
+    target_size=(dim, dim),
     batch_size=32,
     class_mode='categorical'
 )
@@ -66,7 +66,7 @@ checkpoint2 = ModelCheckpoint('./best_DenseNet_model',
     mode='max',
     save_best_only=True)
 
-pretrained_model = DenseNet169(weights='imagenet', include_top=False, input_shape=(200, 200, 3))
+pretrained_model = DenseNet169(weights='imagenet', include_top=False, input_shape=(dim, dim, 3))
 
 
 for layer in pretrained_model.layers:
@@ -151,14 +151,14 @@ test_datagen = ImageDataGenerator(rescale=1.0/255.0)
 # Use the generators to load and preprocess train and test images
 train_generator = train_datagen.flow_from_directory(
     train_directory,
-    target_size=(200, 200),
+    target_size=(dim, dim),
     batch_size=32,
     class_mode='categorical'
 )
 
 test_generator = test_datagen.flow_from_directory(
     test_directory,
-    target_size=(200, 200),
+    target_size=(dim, dim),
     batch_size=32,
     class_mode='categorical'
 )
