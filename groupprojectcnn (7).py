@@ -195,7 +195,7 @@ feature_extractor = pretrained_model.layers[-3].output
 # Freeze the feature extraction layers
 feature_extractor.trainable = False
 
-filters=130
+filters=150
 x = Dropout(0.9)(feature_extractor)
 x = BatchNormalization()(x)
 x = Conv2D(filters, 3, activation='relu', padding='same')(x)
@@ -212,6 +212,8 @@ x = squeeze_excite_block2D(filters, x)
 x = Dropout(0.5)(x)
 x = tf.keras.layers.concatenate([tf.keras.layers.GlobalMaxPooling2D()(x),
                                  tf.keras.layers.GlobalAveragePooling2D()(x)])
+x = tf.keras.layers.Dense(4096, activation='relu')(x)
+x = tf.keras.layers.Dense(1000, activation='relu')(x)
 output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
 # Create the new model
