@@ -28,7 +28,7 @@ train_datagen = ImageDataGenerator(
     shear_range=0.1,
     zoom_range=0.1,
     horizontal_flip=True,
-    fill_mode='nearest'
+    fill_mode='wrap'
 )
 test_datagen = ImageDataGenerator(rescale=1.0/255.0)
 
@@ -130,7 +130,10 @@ train_datagen = ImageDataGenerator(
     shear_range=0.2,
     zoom_range=0.2,
     horizontal_flip=True,
-    fill_mode='nearest'
+    vertical_flip=True,
+    brightness_range=[0.7, 1.3],
+    contrast_range=[0.7, 1.3],
+    fill_mode='wrap'
 )
 test_datagen = ImageDataGenerator(rescale=1.0/255.0)
 
@@ -198,6 +201,7 @@ x = squeeze_excite_block2D(filters, x)
 x = Dropout(0.5)(x)
 x = tf.keras.layers.concatenate([tf.keras.layers.GlobalMaxPooling2D()(x),
                                  tf.keras.layers.GlobalAveragePooling2D()(x)])
+x = tf.keras.layers.Dense(filters, activation='relu')(x)
 output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
 # Create the new model
@@ -219,6 +223,8 @@ history1 = model.fit(
 model.load_weights('best_AdaptedSENet_model')
 model.compile()
 model.save("./fullAdaptedSENetNetmodel.keras")
+scores = model.evaluate(test_generator)
+print (scores)
 # Compile the model
 model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
 
@@ -235,6 +241,8 @@ history2 = model.fit(
 model.load_weights('best_AdaptedSENet_model')
 model.compile()
 model.save("./fullAdaptedSENetNetmodel.keras")
+scores = model.evaluate(test_generator)
+print (scores)
 # Compile the model
 model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
 
