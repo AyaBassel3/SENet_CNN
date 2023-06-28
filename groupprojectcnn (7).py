@@ -111,20 +111,6 @@ model.fit(
 )
 
 
-model.load_weights('best_DenseNet_model')
-# Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.00001), loss='categorical_crossentropy', metrics=['accuracy'])
-
-
-
-model.fit(
-    train_generator,
-    steps_per_epoch=len(train_generator),
-    epochs=15,
-    validation_data=test_generator,
-    validation_steps=len(test_generator),
-    callbacks=[checkpoint, checkpoint2]
-)
 
 model.load_weights('best_DenseNet_model')
 scores = model.evaluate(test_generator)
