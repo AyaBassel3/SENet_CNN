@@ -28,7 +28,7 @@ train_datagen = ImageDataGenerator(
     shear_range=0.1,
     zoom_range=0.1,
     horizontal_flip=True,
-    fill_mode='nearest'
+    fill_mode='wrap'
 )
 test_datagen = ImageDataGenerator(rescale=1.0/255.0)
 
@@ -130,7 +130,10 @@ train_datagen = ImageDataGenerator(
     shear_range=0.2,
     zoom_range=0.2,
     horizontal_flip=True,
-    fill_mode='nearest'
+    vertical_flip=True,
+    brightness_range=[0.7, 1.3],
+    contrast_range=[0.7, 1.3],
+    fill_mode='wrap'
 )
 test_datagen = ImageDataGenerator(rescale=1.0/255.0)
 
