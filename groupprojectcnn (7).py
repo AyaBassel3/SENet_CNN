@@ -15,7 +15,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import KFold
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-dim=275
+dim=300
 train_directory = '/home/pg2022/SENet_CNN/data/data/train'
 test_directory = '/home/pg2022/SENet_CNN/data/data/test'
 
