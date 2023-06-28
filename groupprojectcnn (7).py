@@ -124,9 +124,9 @@ test_directory = '/home/pg2022/SENet_CNN/data/data/test'
 # Create separate instances of ImageDataGenerator for train and test data
 train_datagen = ImageDataGenerator(
     rescale=1.0/255.0,
-    rotation_range=20,
-    width_shift_range=0.25,
-    height_shift_range=0.25,
+    rotation_range=25,
+    width_shift_range=0.3,
+    height_shift_range=0.3,
     shear_range=0.2,
     zoom_range=0.2,
     horizontal_flip=True,
@@ -198,8 +198,6 @@ x = squeeze_excite_block2D(filters, x)
 x = Dropout(0.5)(x)
 x = tf.keras.layers.concatenate([tf.keras.layers.GlobalMaxPooling2D()(x),
                                  tf.keras.layers.GlobalAveragePooling2D()(x)])
-x = tf.keras.layers.Dense(4096, activation='relu')(x)
-x = tf.keras.layers.Dense(1000, activation='relu')(x)
 output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
 # Create the new model
