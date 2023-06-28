@@ -15,7 +15,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import KFold
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-dim=224
+dim=300
 train_directory = '/home/pg2022/SENet_CNN/data/data/train'
 test_directory = '/home/pg2022/SENet_CNN/data/data/test'
 
@@ -157,12 +157,12 @@ def squeeze_excite_block2D(filters, input):
     se = tf.keras.layers.multiply([input, se])
     return se
 
-checkpoint = ModelCheckpoint('./best_AdaptedSENet_model',
+checkpoint3 = ModelCheckpoint('./best_AdaptedSENet_model',
     save_weights_only=True,
     monitor='val_accuracy',
     mode='max',
     save_best_only=True)
-checkpoint2 = ModelCheckpoint('./best_AdaptedSENet_model',
+checkpoint4 = ModelCheckpoint('./best_AdaptedSENet_model',
     save_weights_only=True,
     monitor='val_accuracy',
     mode='max',
@@ -216,7 +216,7 @@ history1 = model.fit(
     epochs=100,
     validation_data=test_generator,
     validation_steps=len(test_generator),
-    callbacks=[checkpoint, checkpoint2]
+    callbacks=[checkpoint3, checkpoint4]
 )
 model.load_weights('best_AdaptedSENet_model')
 model.compile()
@@ -232,7 +232,7 @@ history2 = model.fit(
     epochs=70,
     validation_data=test_generator,
     validation_steps=len(test_generator),
-    callbacks=[checkpoint, checkpoint2]
+    callbacks=[checkpoint3, checkpoint4]
 )
 model.load_weights('best_AdaptedSENet_model')
 model.compile()
@@ -248,7 +248,7 @@ history3 = model.fit(
     epochs=30,
     validation_data=test_generator,
     validation_steps=len(test_generator),
-    callbacks=[checkpoint, checkpoint2]
+    callbacks=[checkpoint3, checkpoint4]
 )
 
 model.load_weights('best_AdaptedSENet_model')
