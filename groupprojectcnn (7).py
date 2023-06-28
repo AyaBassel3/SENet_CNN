@@ -223,6 +223,8 @@ history1 = model.fit(
 model.load_weights('best_AdaptedSENet_model')
 model.compile()
 model.save("./fullAdaptedSENetNetmodel.keras")
+scores = model.evaluate(test_generator)
+print (scores)
 # Compile the model
 model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
 
@@ -239,6 +241,8 @@ history2 = model.fit(
 model.load_weights('best_AdaptedSENet_model')
 model.compile()
 model.save("./fullAdaptedSENetNetmodel.keras")
+scores = model.evaluate(test_generator)
+print (scores)
 # Compile the model
 model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
 
