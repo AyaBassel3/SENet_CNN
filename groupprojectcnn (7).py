@@ -14,6 +14,10 @@ from tensorflow.keras.layers.experimental.preprocessing import RandomRotation, R
 from tensorflow.keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import KFold
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import torch, gc
+gc.collect()
+torch.cuda.empty_cache()
+
 
 dim=300
 
