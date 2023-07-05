@@ -91,11 +91,6 @@ checkpoint3 = ModelCheckpoint('./best_AdaptedSENet_model',
     monitor='val_accuracy',
     mode='max',
     save_best_only=True)
-checkpoint4 = ModelCheckpoint('./best_AdaptedSENet_model',
-    save_weights_only=True,
-    monitor='val_accuracy',
-    mode='max',
-    save_best_only=True)
 
 saved_model_path = "./fullDenseNetmodel.keras"
 pretrained_model = tf.keras.models.load_model(saved_model_path)
@@ -163,7 +158,7 @@ history2 = model.fit(
     epochs=70,
     validation_data=test_generator,
     validation_steps=len(test_generator),
-    callbacks=[checkpoint3, checkpoint4]
+    callbacks=[checkpoint3]
 )
 model.load_weights('best_AdaptedSENet_model')
 model.compile()
@@ -181,7 +176,7 @@ history3 = model.fit(
     epochs=30,
     validation_data=test_generator,
     validation_steps=len(test_generator),
-    callbacks=[checkpoint3, checkpoint4]
+    callbacks=[checkpoint3]
 )
 
 model.load_weights('best_AdaptedSENet_model')
@@ -213,7 +208,7 @@ historyf = trained_model.fit(
     epochs=30,
     validation_data=test_generator,
     validation_steps=len(test_generator),
-    callbacks=[checkpointf]
+    callbacks=[checkpoint3]
 )
 trained_model.load_weights('best_AdaptedSENet_model_tuned')
 trained_model.compile()
