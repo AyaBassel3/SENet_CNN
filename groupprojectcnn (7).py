@@ -42,7 +42,7 @@ model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss='categoric
 
 
 
-model.load_weights('best_DenseNet_model')
+#model.load_weights('best_DenseNet_model')
 scores = model.evaluate(test_generator)
 print (scores)
 model.compile()
