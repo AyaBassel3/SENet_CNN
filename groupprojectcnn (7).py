@@ -43,9 +43,9 @@ model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss='categoric
 
 
 #model.load_weights('best_DenseNet_model')
-scores = model.evaluate(test_generator)
-print (scores)
-model.compile()
+#scores = model.evaluate(test_generator)
+#print (scores)
+#model.compile()
 
 train_directory = '/home/pg2022/SENet_CNN/data/data/train'
 test_directory = '/home/pg2022/SENet_CNN/data/data/test'
