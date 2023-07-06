@@ -20,36 +20,6 @@ from tensorflow import keras
 
 dim=300
 
-
-
-pretrained_model = DenseNet169(weights='imagenet', include_top=False, input_shape=(dim, dim, 3))
-
-
-for layer in pretrained_model.layers:
-    layer.trainable = True
-
-# Modify the last layer for 15 classes
-
-x = pretrained_model.output
-x = tf.keras.layers.GlobalAveragePooling2D()(x)
-x = Dense(15, activation='softmax')(x)
-
-# Create the new model
-model = Model(inputs=pretrained_model.input, outputs=x)
-
-# Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
-
-
-
-#model.load_weights('best_DenseNet_model')
-#scores = model.evaluate(test_generator)
-#print (scores)
-#model.compile()
-
-train_directory = '/home/pg2022/SENet_CNN/data/data/train'
-test_directory = '/home/pg2022/SENet_CNN/data/data/test'
-
 # Create separate instances of ImageDataGenerator for train and test data
 train_datagen = ImageDataGenerator(
     rescale=1.0/255.0,
@@ -79,6 +49,37 @@ test_generator = test_datagen.flow_from_directory(
     batch_size=32,
     class_mode='categorical'
 )
+
+pretrained_model = DenseNet169(weights='imagenet', include_top=False, input_shape=(dim, dim, 3))
+
+
+for layer in pretrained_model.layers:
+    layer.trainable = True
+
+# Modify the last layer for 15 classes
+
+x = pretrained_model.output
+x = tf.keras.layers.GlobalAveragePooling2D()(x)
+x = Dense(15, activation='softmax')(x)
+
+# Create the new model
+model = Model(inputs=pretrained_model.input, outputs=x)
+
+# Compile the model
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
+
+
+
+saved_model_path = "./fullDenseNetmodel.keras"
+model = tf.keras.models.load_model(saved_model_path)
+scores = model.evaluate(test_generator)
+print (scores)
+model.compile()
+
+train_directory = '/home/pg2022/SENet_CNN/data/data/train'
+test_directory = '/home/pg2022/SENet_CNN/data/data/test'
+
+
 
 def squeeze_excite_block2D(filters, input):
     se = tf.keras.layers.GlobalAveragePooling2D()(input)
