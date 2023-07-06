@@ -195,7 +195,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 #model.summary()
 
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=2)])
 
 
 
@@ -213,7 +213,7 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001), loss='categorical_crossentropy',metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001), loss='categorical_crossentropy',metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=2)])
 
 
 
@@ -231,7 +231,7 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001), loss='categorical_crossentropy',metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001), loss='categorical_crossentropy',metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=2)])
 
 
 
@@ -266,7 +266,7 @@ trained_model = tf.keras.models.load_model(saved_model_path)
 for layer in trained_model.layers:
     layer.trainable = True
 
-trained_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
+trained_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=2)])
 historyf = trained_model.fit(
     train_generator,
     steps_per_epoch=len(train_generator),
