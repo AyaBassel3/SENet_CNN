@@ -15,7 +15,7 @@ from tensorflow.keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import KFold
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow import keras
-
+from tf_bi_tempered_loss import BiTemperedLogisticLoss
 
 
 
@@ -195,7 +195,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 #model.summary()
 
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=2)])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=BiTemperedLogisticLoss(t1=0.8, t2=1.2), metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
 
 
 
@@ -213,7 +213,7 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001), loss='categorical_crossentropy',metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=2)])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001),loss=BiTemperedLogisticLoss(t1=0.3, t2=3.0),metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
 
 
 
@@ -231,7 +231,7 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001), loss='categorical_crossentropy',metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=2)])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001),loss=BiTemperedLogisticLoss(t1=0.9, t2=1.05),metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
 
 
 
@@ -244,9 +244,6 @@ history3 = model.fit(
     callbacks=[checkpoint3]
 )
 
-model.load_weights('best_AdaptedSENet_model')
-model.compile()
-model.save("./fullAdaptedSENetNetmodel.keras")
 
 model.load_weights('best_AdaptedSENet_model')
 scores = model.evaluate(test_generator)
@@ -261,23 +258,6 @@ checkpointf = ModelCheckpoint('./best_AdaptedSENet_model_tuned',
     save_best_only=True)
 
 saved_model_path = "./fullAdaptedSENetNetmodel.kerass"
-trained_model = tf.keras.models.load_model(saved_model_path)
-
-for layer in trained_model.layers:
-    layer.trainable = True
-
-trained_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=2)])
-historyf = trained_model.fit(
-    train_generator,
-    steps_per_epoch=len(train_generator),
-    epochs=30,
-    validation_data=test_generator,
-    validation_steps=len(test_generator),
-    callbacks=[checkpoint3]
-)
-trained_model.load_weights('best_AdaptedSENet_model_tuned')
-trained_model.compile()
-trained_model.save("./fullAdaptedSENetNetmodelTuned.keras")
-
+model.load_weights('best_AdaptedSENet_model')
 scores = model.evaluate(test_generator)
 print (scores)
