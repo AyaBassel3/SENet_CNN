@@ -195,7 +195,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 #model.summary()
 
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=BiTemperedLogisticLoss(t1=0.8, t2=1.2), metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=BiTemperedLogisticLoss(t1=0.3, t2=3.0), metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
 
 
 
@@ -213,7 +213,7 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001),loss=BiTemperedLogisticLoss(t1=0.3, t2=3.0),metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001),loss=BiTemperedLogisticLoss(t1=0.8, t2=1.2),metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
 
 
 
