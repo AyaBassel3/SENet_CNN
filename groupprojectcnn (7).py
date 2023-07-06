@@ -19,7 +19,8 @@ from tensorflow import keras
 
 
 dim=300
-
+train_directory = '/home/pg2022/SENet_CNN/data/data/train'
+test_directory = '/home/pg2022/SENet_CNN/data/data/test'
 # Create separate instances of ImageDataGenerator for train and test data
 train_datagen = ImageDataGenerator(
     rescale=1.0/255.0,
@@ -76,8 +77,7 @@ scores = model.evaluate(test_generator)
 print (scores)
 model.compile()
 
-train_directory = '/home/pg2022/SENet_CNN/data/data/train'
-test_directory = '/home/pg2022/SENet_CNN/data/data/test'
+
 
 
 
