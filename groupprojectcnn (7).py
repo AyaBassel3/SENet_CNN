@@ -19,43 +19,7 @@ from tensorflow import keras
 
 
 dim=300
-train_directory = '/home/pg2022/SENet_CNN/data/data/train'
-test_directory = '/home/pg2022/SENet_CNN/data/data/test'
 
-# Create separate instances of ImageDataGenerator for train and test data
-train_datagen = ImageDataGenerator(
-    rescale=1.0/255.0,
-    rotation_range=20,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    shear_range=0.1,
-    zoom_range=0.1,
-    horizontal_flip=True,
-    fill_mode='nearest'
-)
-test_datagen = ImageDataGenerator(rescale=1.0/255.0)
-
-# Use the generators to load and preprocess train and test images
-train_generator = train_datagen.flow_from_directory(
-    train_directory,
-    target_size=(dim, dim),
-    batch_size=32,
-    class_mode='categorical'
-)
-
-test_generator = test_datagen.flow_from_directory(
-    test_directory,
-    target_size=(dim, dim),
-    batch_size=32,
-    class_mode='categorical'
-)
-
-
-checkpoint = ModelCheckpoint('./best_DenseNet_model',
-    save_weights_only=True,
-    monitor='val_accuracy',
-    mode='max',
-    save_best_only=True)
 
 
 pretrained_model = DenseNet169(weights='imagenet', include_top=False, input_shape=(dim, dim, 3))
@@ -78,37 +42,10 @@ model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss='categoric
 
 
 
-model.fit(
-    train_generator,
-    steps_per_epoch=len(train_generator),
-    epochs=50,
-    validation_data=test_generator,
-    validation_steps=len(test_generator),
-    callbacks=[checkpoint]
-)
-
-model.load_weights('best_DenseNet_model')
-# Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
-
-
-
-model.fit(
-    train_generator,
-    steps_per_epoch=len(train_generator),
-    epochs=15,
-    validation_data=test_generator,
-    validation_steps=len(test_generator),
-    callbacks=[checkpoint]
-)
-
-
-
 model.load_weights('best_DenseNet_model')
 scores = model.evaluate(test_generator)
 print (scores)
 model.compile()
-model.save("./fullDenseNetmodel.keras")
 
 train_directory = '/home/pg2022/SENet_CNN/data/data/train'
 test_directory = '/home/pg2022/SENet_CNN/data/data/test'
@@ -205,7 +142,7 @@ history1 = model.fit(
     epochs=100,
     validation_data=test_generator,
     validation_steps=len(test_generator),
-    callbacks=[checkpoint3, checkpoint4]
+    callbacks=[checkpoint3]
 )
 model.load_weights('best_AdaptedSENet_model')
 model.compile()
