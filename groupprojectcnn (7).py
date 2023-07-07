@@ -188,14 +188,14 @@ x = Dropout(0.5)(x)
 #x = tf.keras.layers.concatenate([tf.keras.layers.GlobalMaxPooling2D()(x),
 #                                tf.keras.layers.GlobalAveragePooling2D()(x)])
 x = tf.keras.layers.Flatten()(x)
-x = tf.keras.layers.Dense(1000, activation='relu')(x)
+x = tf.keras.layers.Dense(500, activation='relu')(x)
 output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
 # Create the new model
 model = Model(inputs=pretrained_model.input, outputs=output)
 #model.summary()
 
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=BiTemperedLogisticLoss(t1=0.8, t2=1.2), metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=BiTemperedLogisticLoss(t1=0.4, t2=4.0), metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
 
 
 
