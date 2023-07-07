@@ -188,7 +188,7 @@ x = Dropout(0.5)(x)
 #x = tf.keras.layers.concatenate([tf.keras.layers.GlobalMaxPooling2D()(x),
 #                                tf.keras.layers.GlobalAveragePooling2D()(x)])
 x = tf.keras.layers.Flatten()(x)
-x = tf.keras.layers.Dense(300, activation='relu')(x)
+x = tf.keras.layers.Dense(1000, activation='relu')(x)
 output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
 # Create the new model
