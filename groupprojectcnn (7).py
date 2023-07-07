@@ -232,7 +232,7 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001),loss=BiTemperedLogisticLoss(t1=0.9, t2=1.05),metrics=['accuracy')
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001),loss=BiTemperedLogisticLoss(t1=0.9, t2=1.05),metrics=['accuracy'])
 
 
 
