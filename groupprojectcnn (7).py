@@ -188,18 +188,37 @@ x = Dropout(0.5)(x)
 #x = tf.keras.layers.concatenate([tf.keras.layers.GlobalMaxPooling2D()(x),
 #                                tf.keras.layers.GlobalAveragePooling2D()(x)])
 x = tf.keras.layers.Flatten()(x)
-x = tf.keras.layers.Dense(500, activation='relu')(x)
+x = tf.keras.layers.Dense(512, activation='relu')(x)
+x = tf.keras.layers.Dense(128, activation='relu')(x)
 output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
 # Create the new model
 model = Model(inputs=pretrained_model.input, outputs=output)
 #model.summary()
 
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=BiTemperedLogisticLoss(t1=0.4, t2=4.0), metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=BiTemperedLogisticLoss(t1=0.8, t2=1.2), metrics=['accuracy'])
 
 
 
 history1 = model.fit(
+    train_generator,
+    steps_per_epoch=len(train_generator),
+    epochs=200,
+    validation_data=test_generator,
+    validation_steps=len(test_generator),
+    callbacks=[checkpoint3]
+)
+model.load_weights('best_AdaptedSENet_model')
+model.compile()
+model.save("./fullAdaptedSENetNetmodel.keras")
+scores = model.evaluate(test_generator)
+print (scores)
+# Compile the model
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss=BiTemperedLogisticLoss(t1=0.85, t2=1.15),metrics=['accuracy'])
+
+
+
+history2 = model.fit(
     train_generator,
     steps_per_epoch=len(train_generator),
     epochs=100,
@@ -213,32 +232,14 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001),loss=BiTemperedLogisticLoss(t1=0.85, t2=1.15),metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
-
-
-
-history2 = model.fit(
-    train_generator,
-    steps_per_epoch=len(train_generator),
-    epochs=70,
-    validation_data=test_generator,
-    validation_steps=len(test_generator),
-    callbacks=[checkpoint3]
-)
-model.load_weights('best_AdaptedSENet_model')
-model.compile()
-model.save("./fullAdaptedSENetNetmodel.keras")
-scores = model.evaluate(test_generator)
-print (scores)
-# Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001),loss=BiTemperedLogisticLoss(t1=0.9, t2=1.05),metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=1)])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.0001),loss=BiTemperedLogisticLoss(t1=0.9, t2=1.05),metrics=['accuracy')
 
 
 
 history3 = model.fit(
     train_generator,
     steps_per_epoch=len(train_generator),
-    epochs=30,
+    epochs=100,
     validation_data=test_generator,
     validation_steps=len(test_generator),
     callbacks=[checkpoint3]
