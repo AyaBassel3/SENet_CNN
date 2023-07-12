@@ -43,14 +43,14 @@ train_generator = train_datagen.flow_from_directory(
     train_directory,
     target_size=(dim, dim),
     batch_size=32,
-    class_mode='categorical'
+    class_mode='sparse'
 )
 
 test_generator = test_datagen.flow_from_directory(
     test_directory,
     target_size=(dim, dim),
     batch_size=32,
-    class_mode='categorical'
+    class_mode='sparse'
 )
 
 pretrained_model = DenseNet169(weights='imagenet', include_top=False, input_shape=(dim, dim, 3))
