@@ -43,14 +43,14 @@ train_generator = train_datagen.flow_from_directory(
     train_directory,
     target_size=(dim, dim),
     batch_size=32,
-    class_mode='sparse'
+    class_mode='categorical'
 )
 
 test_generator = test_datagen.flow_from_directory(
     test_directory,
     target_size=(dim, dim),
     batch_size=32,
-    class_mode='sparse'
+    class_mode='categorical'
 )
 
 pretrained_model = DenseNet169(weights='imagenet', include_top=False, input_shape=(dim, dim, 3))
@@ -114,7 +114,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 #model.summary()
 
-model.compile(optimizer='adam', loss=tf.losses.SigmoidFocalCrossEntropy(), metrics=['accuracy'])
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 
 
@@ -132,7 +132,7 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss=BiTemperedLogisticLoss(t1=0.85, t2=1.15),metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss='categorical_crossentropy',metrics=['accuracy'])
 
 
 
@@ -150,7 +150,7 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss=BiTemperedLogisticLoss(t1=0.9, t2=1.05),metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss='categorical_crossentropy',metrics=['accuracy'])
 
 
 
