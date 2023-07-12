@@ -59,23 +59,6 @@ pretrained_model = DenseNet169(weights='imagenet', include_top=False, input_shap
 for layer in pretrained_model.layers:
     layer.trainable = True
 
-# Modify the last layer for 15 classes
-
-x = pretrained_model.output
-x = tf.keras.layers.GlobalAveragePooling2D()(x)
-x = Dense(15, activation='softmax')(x)
-
-# Create the new model
-t_model = Model(inputs=pretrained_model.input, outputs=x)
-
-# Compile the model
-t_model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
-
-
-scores = t_model.evaluate(test_generator)
-print (scores)
-
-
 
 def squeeze_excite_block2D(filters, input):
     se = tf.keras.layers.GlobalAveragePooling2D()(input)
@@ -95,7 +78,7 @@ for layer in pretrained_model.layers:
 
 # Extract the feature extraction layers
 
-feature_extractor = pretrained_model.layers[-400].output
+feature_extractor = pretrained_model.layers[-300].output
 
 # Freeze the feature extraction layers
 feature_extractor.trainable = False
