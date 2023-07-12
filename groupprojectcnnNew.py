@@ -78,10 +78,10 @@ for layer in pretrained_model.layers:
 
 # Extract the feature extraction layers
 
-feature_extractor = pretrained_model.layers[-300].output
+feature_extractor = pretrained_model.layers[-200].output
 
 # Freeze the feature extraction layers
-feature_extractor.trainable = False
+feature_extractor.trainable = True
 
 filters=300
 x = Dropout(0.9)(feature_extractor)
