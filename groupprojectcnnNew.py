@@ -114,7 +114,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 #model.summary()
 
-model.compile(optimizer='adam', loss=BiTemperedLogisticLoss(t1=1, t2=1), metrics=['accuracy'])
+model.compile(optimizer='adam', loss=tf.losses.SigmoidFocalCrossEntropy(), metrics=['accuracy'])
 
 
 
