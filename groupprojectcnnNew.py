@@ -78,13 +78,18 @@ for layer in pretrained_model.layers:
 
 # Extract the feature extraction layers
 
-feature_extractor = pretrained_model.layers[-200].output
+feature_extractor = pretrained_model.layers[-400].output
 
 # Freeze the feature extraction layers
-feature_extractor.trainable = True
+feature_extractor.trainable = False
 
 filters=300
-x = Dropout(0.9)(feature_extractor)
+x = Dropout(0.8)(feature_extractor)
+x = BatchNormalization()(x)
+x = Conv2D(filters, 3, activation='relu', padding='same')(x)
+x = Conv2D(filters, 3, activation='relu', padding='same')(x)
+x = Conv2D(filters, 3, activation='relu', padding='same')(x)
+x = Dropout(0.8)(x)
 x = BatchNormalization()(x)
 x = Conv2D(filters, 3, activation='relu', padding='same')(x)
 x = Conv2D(filters, 3, activation='relu', padding='same')(x)
@@ -101,14 +106,15 @@ x = Dropout(0.5)(x)
 #x = tf.keras.layers.concatenate([tf.keras.layers.GlobalMaxPooling2D()(x),
 #                                tf.keras.layers.GlobalAveragePooling2D()(x)])
 x = tf.keras.layers.Flatten()(x)
-x = tf.keras.layers.Dense(512, activation='relu')(x)
+x = tf.keras.layers.Dense(4096, activation='relu')(x)
+x = tf.keras.layers.Dense(1000, activation='relu')(x)
 output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
 # Create the new model
 model = Model(inputs=pretrained_model.input, outputs=output)
 #model.summary()
 
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=loss=BiTemperedLogisticLoss(t1=1, t2=1), metrics=['accuracy'])
 
 
 
