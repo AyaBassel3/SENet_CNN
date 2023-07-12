@@ -16,6 +16,7 @@ from sklearn.model_selection import KFold
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow import keras
 from tf_bi_tempered_loss import BiTemperedLogisticLoss
+from tf_bi_tempered_loss import tempered_softmax
 
 
 
@@ -195,7 +196,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 #model.summary()
 
-model.compile(optimizer=tf.optimizers.SGD(learning_rate=0.1, momentum=0.9), loss=BiTemperedLogisticLoss(t1=0.2, t2=4.0), metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.tempered_softmax01, loss=BiTemperedLogisticLoss(t1=0.2, t2=4.0), metrics=['accuracy'])
 
 
 
