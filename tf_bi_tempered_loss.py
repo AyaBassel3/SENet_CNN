@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-
+import numpy as np
 import tensorflow as tf
+from tensorflow.keras.activations import softmax
+from tensorflow.keras.losses import CategoricalCrossentropy
 
 def log_t(u, t):
   """Compute log_t for `u`."""
@@ -101,3 +103,37 @@ class BiTemperedLogisticLoss(tf.keras.losses.Loss):
 
   def call(self, y_true, y_pred):
     return bi_tempered_logistic_loss(y_pred, y_true, self.t1, self.t2, self.n_iter, self.label_smoothing)
+
+# Taylor cross entropy loss
+def taylor_cross_entropy_loss(y_pred, y_true, n=3, label_smoothing=0.0):
+    """Taylor Cross Entropy Loss.
+    Args:
+    y_pred: A multi-dimensional probability tensor with last dimension `num_classes`.
+    y_true: A tensor with shape and dtype as y_pred.
+    n: An order of taylor expansion.
+    label_smoothing: A float in [0, 1] for label smoothing.
+    Returns:
+    A loss tensor.
+    """
+    y_pred = tf.cast(y_pred, tf.float32)
+    y_true = tf.cast(y_true, tf.float32)
+
+    if label_smoothing > 0.0:
+        num_classes = tf.cast(tf.shape(y_true)[-1], tf.float32)
+        y_true = (1 - num_classes /(num_classes - 1) * label_smoothing) * y_true + label_smoothing / (num_classes - 1)
+    
+    y_pred_n_order = tf.math.maximum(tf.stack([1 - y_pred] * n), 1e-7) # avoide being too small value
+    numerator = tf.math.maximum(tf.math.cumprod(y_pred_n_order, axis=0), 1e-7) # avoide being too small value
+    denominator = tf.expand_dims(tf.expand_dims(tf.range(1, n+1, dtype="float32"), axis=1), axis=1)
+    y_pred_taylor = tf.math.maximum(tf.math.reduce_sum(tf.math.divide(numerator, denominator), axis=0), 1e-7) # avoide being too small value
+    loss_values = tf.math.reduce_sum(y_true * y_pred_taylor, axis=1, keepdims=True)
+    return tf.math.reduce_sum(loss_values, -1)
+
+class TaylorCrossEntropyLoss(tf.keras.losses.Loss):
+    def __init__(self, n=3, label_smoothing=0.0):
+        super(TaylorCrossEntropyLoss, self).__init__()
+        self.n = n
+        self.label_smoothing = label_smoothing
+    
+    def call(self, y_true, y_pred):
+        return taylor_cross_entropy_loss(y_pred, y_true, n=self.n, label_smoothing=self.label_smoothing)
