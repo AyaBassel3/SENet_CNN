@@ -75,8 +75,7 @@ x = Dense(15, activation='softmax')(x)
 
 # Create the new model
 model = Model(inputs=pretrained_model.input, outputs=x)
-y_true= train_generator.classes
-y_pred= x
+
 # Compile the model
 model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss='categorical_crossentropy', metrics=['accuracy'])
 
