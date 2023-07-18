@@ -18,7 +18,24 @@ from tensorflow import keras
 from tf_bi_tempered_loss import BiTemperedLogisticLoss
 from tf_bi_tempered_loss import tempered_softmax
 from tf_bi_tempered_loss import TaylorCrossEntropyLoss
+from tensorflow.keras.losses import CategoricalCrossentropy
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.optimizers import Adam, SGD
+from tensorflow.keras.utils import to_categorical
+from loss import _internal_bi_tempered_logistic_loss as bi_tempered_logistic_loss
 
+
+class BiTemperedWrapper:
+
+    def __init__(self, t1=1., t2=1.):
+        self.t1 = t1
+        self.t2 = t2
+        self.cce = CategoricalCrossentropy(from_logits=True)
+
+    def __call__(self, labels, activations):
+        if self.t1 == 1. and self.t2 == 1.:
+            return self.cce(labels, activations)
+        return bi_tempered_logistic_loss(activations, labels, self.t1,  self.t2)
 
 
 dim=300
@@ -77,9 +94,7 @@ x = Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=x)
 
 # Compile the model
-y_pred= x
-y_true= train_generator.classes
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=BiTemperedLogisticLoss(t1=0.5, t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=BiTemperedWrapper(t1=1.0,t2=1.0), metrics=['accuracy'])
 
 
 
@@ -94,7 +109,7 @@ model.fit(
 
 model.load_weights('best_DenseNet_model')
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=BiTemperedLogisticLoss(t1=1.0, t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=loss=BiTemperedWrapper(t1=1.0,t2=1.0), metrics=['accuracy'])
 
 
 
@@ -196,9 +211,8 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 # Create the new model
 model = Model(inputs=pretrained_model.input, outputs=output)
 #model.summary()
-y_pred= output
-y_true= train_generator.classes
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=BiTemperedLogisticLoss(t1=0.2, t2=1.0), metrics=['accuracy'])
+
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=loss=BiTemperedWrapper(t1=1.0,t2=1.0)), metrics=['accuracy'])
 
 
 
@@ -216,8 +230,7 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-y_pred= output
-y_true= train_generator.classes
+
 model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss=TaylorCrossEntropyLoss(n=3),metrics=['accuracy'])
 
 
@@ -236,8 +249,6 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-y_pred= output
-y_true= train_generator.classes
 model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss='categorical_crossentropy',metrics=['accuracy'])
 
 
@@ -245,7 +256,7 @@ model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss='categorica
 history3 = model.fit(
     train_generator,
     steps_per_epoch=len(train_generator),
-    epochs=100,
+    epochs=50,
     validation_data=test_generator,
     validation_steps=len(test_generator),
     callbacks=[checkpoint3]
