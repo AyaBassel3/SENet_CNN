@@ -94,7 +94,7 @@ x = Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=x)
 
 # Compile the model
-model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.97,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.95,t2=1.05), metrics=['accuracy'])
 
 
 
@@ -106,22 +106,6 @@ model.fit(
     validation_steps=len(test_generator),
     callbacks=[checkpoint]
 )
-
-model.load_weights('best_DenseNet_model')
-# Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=BiTemperedWrapper(t1=0.97,t2=1.0), metrics=['accuracy'])
-
-
-
-model.fit(
-    train_generator,
-    steps_per_epoch=len(train_generator),
-    epochs=50,
-    validation_data=test_generator,
-    validation_steps=len(test_generator),
-    callbacks=[checkpoint]
-)
-
 
 
 model.load_weights('best_DenseNet_model')
@@ -212,7 +196,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 model.summary()
 
-model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.97,t2=1.03), metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.95,t2=1.05), metrics=['accuracy'])
 
 
 
@@ -229,48 +213,4 @@ model.compile()
 model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
-# Compile the model
 
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss=BiTemperedWrapper(t1=0.97,t2=1.03),metrics=['accuracy'])
-
-
-
-history2 = model.fit(
-    train_generator,
-    steps_per_epoch=len(train_generator),
-    epochs=100,
-    validation_data=test_generator,
-    validation_steps=len(test_generator),
-    callbacks=[checkpoint3]
-)
-model.load_weights('best_AdaptedSENet_model')
-model.compile()
-model.save("./fullAdaptedSENetNetmodel.keras")
-scores = model.evaluate(test_generator)
-print (scores)
-# Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss=BiTemperedWrapper(t1=0.97,t2=1.03),metrics=['accuracy'])
-
-
-
-history3 = model.fit(
-    train_generator,
-    steps_per_epoch=len(train_generator),
-    epochs=50,
-    validation_data=test_generator,
-    validation_steps=len(test_generator),
-    callbacks=[checkpoint3]
-)
-
-
-model.load_weights('best_AdaptedSENet_model')
-scores = model.evaluate(test_generator)
-print (scores)
-model.compile()
-model.save("./fullAdaptedSENetNetmodel.keras")
-
-
-saved_model_path = "./fullAdaptedSENetNetmodel.kerass"
-model.load_weights('best_AdaptedSENet_model')
-scores = model.evaluate(test_generator)
-print (scores)
