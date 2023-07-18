@@ -261,7 +261,7 @@ history3 = model.fit(
     validation_steps=len(test_generator),
     callbacks=[checkpoint3]
 )
-/
+
 
 model.load_weights('best_AdaptedSENet_model')
 scores = model.evaluate(test_generator)
