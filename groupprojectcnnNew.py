@@ -109,7 +109,7 @@ model.fit(
 
 model.load_weights('best_DenseNet_model')
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=loss=BiTemperedWrapper(t1=1.0,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=BiTemperedWrapper(t1=1.0,t2=1.0), metrics=['accuracy'])
 
 
 
@@ -212,7 +212,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 #model.summary()
 
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=loss=BiTemperedWrapper(t1=1.0,t2=1.0)), metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=BiTemperedWrapper(t1=1.0,t2=1.0)), metrics=['accuracy'])
 
 
 
