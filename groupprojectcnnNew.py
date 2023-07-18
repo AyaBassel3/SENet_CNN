@@ -94,14 +94,14 @@ x = Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=x)
 
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=BiTemperedWrapper(t1=1.0,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=BiTemperedWrapper(t1=0.9,t2=1.1), metrics=['accuracy'])
 
 
 
 model.fit(
     train_generator,
     steps_per_epoch=len(train_generator),
-    epochs=50,
+    epochs=100,
     validation_data=test_generator,
     validation_steps=len(test_generator),
     callbacks=[checkpoint]
@@ -109,14 +109,14 @@ model.fit(
 
 model.load_weights('best_DenseNet_model')
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=BiTemperedWrapper(t1=1.0,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001), loss=BiTemperedWrapper(t1=0.9,t2=1.1), metrics=['accuracy'])
 
 
 
 model.fit(
     train_generator,
     steps_per_epoch=len(train_generator),
-    epochs=15,
+    epochs=50,
     validation_data=test_generator,
     validation_steps=len(test_generator),
     callbacks=[checkpoint]
@@ -210,16 +210,16 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
 # Create the new model
 model = Model(inputs=pretrained_model.input, outputs=output)
-#model.summary()
+model.summary()
 
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.01), loss=BiTemperedWrapper(t1=1.0,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.9,t2=1.1), metrics=['accuracy'])
 
 
 
 history1 = model.fit(
     train_generator,
     steps_per_epoch=len(train_generator),
-    epochs=200,
+    epochs=300,
     validation_data=test_generator,
     validation_steps=len(test_generator),
     callbacks=[checkpoint3]
@@ -231,7 +231,7 @@ scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
 
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss=TaylorCrossEntropyLoss(n=3),metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss=BiTemperedWrapper(t1=0.9,t2=1.1),metrics=['accuracy'])
 
 
 
@@ -249,7 +249,7 @@ model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
 print (scores)
 # Compile the model
-model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss='categorical_crossentropy',metrics=['accuracy'])
+model.compile(optimizer=tf.optimizers.Adam(learning_rate=0.001),loss=BiTemperedWrapper(t1=0.9,t2=1.1),metrics=['accuracy'])
 
 
 
