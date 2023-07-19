@@ -94,7 +94,7 @@ x = Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=x)
 
 # Compile the model
-model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.95,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.9,t2=1.0), metrics=['accuracy'])
 
 
 
@@ -189,6 +189,7 @@ x = Dropout(0.5)(x)
 #x = tf.keras.layers.concatenate([tf.keras.layers.GlobalMaxPooling2D()(x),
 #                                tf.keras.layers.GlobalAveragePooling2D()(x)])
 x = tf.keras.layers.Flatten()(x)
+x = tf.keras.layers.Dense(1024, activation='relu')(x)
 x = tf.keras.layers.Dense(512, activation='relu')(x)
 output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
@@ -196,14 +197,14 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 model.summary()
 
-model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.95,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.9,t2=1.0), metrics=['accuracy'])
 
 
 
 history1 = model.fit(
     train_generator,
     steps_per_epoch=len(train_generator),
-    epochs=300,
+    epochs=500,
     validation_data=test_generator,
     validation_steps=len(test_generator),
     callbacks=[checkpoint3]
