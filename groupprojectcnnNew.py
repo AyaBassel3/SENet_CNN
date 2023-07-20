@@ -160,16 +160,17 @@ checkpoint3 = ModelCheckpoint('./best_AdaptedSENet_model',
 
 saved_model_path = "./fullDenseNetmodel.keras"
 pretrained_model = tf.keras.models.load_model(saved_model_path)
-
+scores = pretrained_model.evaluate(test_generator)
+print ("pretrained_model:  " + scores)
 for layer in pretrained_model.layers:
-    layer.trainable = True
+    layer.trainable = False
 
 # Extract the feature extraction layers
 
-feature_extractor = pretrained_model.layers[-200].output
+feature_extractor = pretrained_model.layers[-30].output
 
 # Freeze the feature extraction layers
-feature_extractor.trainable = True
+feature_extractor.trainable = False
 
 filters=150
 x = Dropout(0.9)(feature_extractor)
@@ -197,7 +198,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 model.summary()
 
-model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.9,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.95,t2=1.0), metrics=['accuracy'])
 
 
 
