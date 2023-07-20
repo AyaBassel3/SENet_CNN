@@ -158,8 +158,8 @@ checkpoint3 = ModelCheckpoint('./best_AdaptedSENet_model',
     mode='max',
     save_best_only=True)
 
-saved_model_path = "./fullDenseNetmodel.keras"
-pretrained_model = tf.keras.models.load_model(saved_model_path)
+#saved_model_path = "./fullDenseNetmodel.keras"
+pretrained_model = model
 scores = pretrained_model.evaluate(test_generator)
 print ("pretrained_model:  ")
 print (scores)
