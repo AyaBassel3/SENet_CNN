@@ -98,14 +98,14 @@ model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.9,t2=1.0)
 
 
 
-model.fit(
-    train_generator,
-    steps_per_epoch=len(train_generator),
-    epochs=100,
-    validation_data=test_generator,
-    validation_steps=len(test_generator),
-    callbacks=[checkpoint]
-)
+#model.fit(
+#    train_generator,
+#    steps_per_epoch=len(train_generator),
+#    epochs=100,
+#    validation_data=test_generator,
+#    validation_steps=len(test_generator),
+#    callbacks=[checkpoint]
+#)
 
 
 model.load_weights('best_DenseNet_model')
@@ -162,14 +162,14 @@ saved_model_path = "./fullDenseNetmodel.keras"
 pretrained_model = tf.keras.models.load_model(saved_model_path)
 
 for layer in pretrained_model.layers:
-    layer.trainable = False
+    layer.trainable = True
 
 # Extract the feature extraction layers
 
 feature_extractor = pretrained_model.layers[-3].output
 
 # Freeze the feature extraction layers
-feature_extractor.trainable = False
+feature_extractor.trainable = True
 
 filters=150
 x = Dropout(0.9)(feature_extractor)
