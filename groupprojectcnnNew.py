@@ -111,8 +111,8 @@ model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.9,t2=1.0)
 model.load_weights('best_DenseNet_model')
 scores = model.evaluate(test_generator)
 print (scores)
-model.compile()
-model.save("./fullDenseNetmodel.keras")
+#model.compile()
+#model.save("./fullDenseNetmodel.keras")
 
 
 # Create separate instances of ImageDataGenerator for train and test data
@@ -127,22 +127,6 @@ train_datagen = ImageDataGenerator(
     vertical_flip=True,
     brightness_range=[0.7, 1.3],
     fill_mode='nearest'
-)
-test_datagen = ImageDataGenerator(rescale=1.0/255.0)
-
-# Use the generators to load and preprocess train and test images
-train_generator = train_datagen.flow_from_directory(
-    train_directory,
-    target_size=(dim, dim),
-    batch_size=32,
-    class_mode='categorical'
-)
-
-test_generator = test_datagen.flow_from_directory(
-    test_directory,
-    target_size=(dim, dim),
-    batch_size=32,
-    class_mode='categorical'
 )
 
 def squeeze_excite_block2D(filters, input):
