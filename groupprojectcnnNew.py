@@ -5,7 +5,7 @@ device_lib.list_local_devices()
 
 import tensorflow as tf
 from tensorflow.keras.applications import DenseNet169
-from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, BatchNormalization, Conv2D, Dropout
+from tensorflow.keras.layers import Dense, GlobalAveragePooling2D, BatchNormalization, Conv2D, Conv3D, Dropout
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import layers
@@ -152,12 +152,12 @@ for layer in pretrained_model.layers:
 
 # Extract the feature extraction layers
 
-feature_extractor = pretrained_model.layers[-30].output
+feature_extractor = pretrained_model.layers[-230].output
 
 # Freeze the feature extraction layers
 feature_extractor.trainable = False
 
-filters=200
+filters=256
 x = Dropout(0.9)(feature_extractor)
 x = BatchNormalization()(x)
 x = Conv2D(filters, 3, activation='relu', padding='same')(x)
@@ -170,7 +170,7 @@ x = Conv2D(filters, 3, activation='relu', padding='same')(x)
 x = Conv2D(filters, 3, activation='relu', padding='same')(x)
 x = Dropout(0.8)(x)
 x = BatchNormalization()(x)
-x = squeeze_excite_block2D(filters, x)
+x = squeeze_excite_block2D(filters*4, x)
 x = Dropout(0.5)(x)
 #x = tf.keras.layers.concatenate([tf.keras.layers.GlobalMaxPooling2D()(x),
 #                                tf.keras.layers.GlobalAveragePooling2D()(x)])
@@ -183,7 +183,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 model.summary()
 
-model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.95,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.4,t2=1.0), metrics=['accuracy'])
 
 
 
