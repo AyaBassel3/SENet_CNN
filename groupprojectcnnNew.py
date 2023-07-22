@@ -71,7 +71,7 @@ test_generator = test_datagen.flow_from_directory(
 )
 
 
-checkpoint = ModelCheckpoint('./best_DenseNet_model',
+checkpoint = ModelCheckpoint('./best_DenseNet_model64',
     save_weights_only=True,
     monitor='val_accuracy',
     mode='max',
@@ -94,28 +94,28 @@ x = Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=x)
 
 # Compile the model
-model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.9,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.97,t2=1.0), metrics=['accuracy'])
 
 
 
-#model.fit(
-#    train_generator,
-#    steps_per_epoch=len(train_generator),
-#    epochs=100,
-#    validation_data=test_generator,
-#    validation_steps=len(test_generator),
-#    callbacks=[checkpoint]
-#)
+model.fit(
+    train_generator,
+    steps_per_epoch=len(train_generator),
+    epochs=100,
+    validation_data=test_generator,
+    validation_steps=len(test_generator),
+    callbacks=[checkpoint]
+)
 
 
-model.load_weights('best_DenseNet_model')
+model.load_weights('best_DenseNet_model64')
 scores = model.evaluate(test_generator)
 print (scores)
 #model.compile()
-#model.save("./fullDenseNetmodel.keras")
+#model.save("./fullDenseNetmodel64.keras")
 
 
-# Create separate instances of ImageDataGenerator for train and test data
+# Create separate instances of ImageDataGenerator for train data
 train_datagen = ImageDataGenerator(
     rescale=1.0/255.0,
     rotation_range=25,
