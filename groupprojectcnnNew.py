@@ -152,7 +152,7 @@ for layer in pretrained_model.layers:
 
 # Extract the feature extraction layers
 
-feature_extractor = pretrained_model.layers[-1].output
+feature_extractor = pretrained_model.layers[-3].output
 
 # Freeze the feature extraction layers
 feature_extractor.trainable = False
