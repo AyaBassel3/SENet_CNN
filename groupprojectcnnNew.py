@@ -59,14 +59,14 @@ test_datagen = ImageDataGenerator(rescale=1.0/255.0)
 train_generator = train_datagen.flow_from_directory(
     train_directory,
     target_size=(dim, dim),
-    batch_size=32,
+    batch_size=64,
     class_mode='categorical'
 )
 
 test_generator = test_datagen.flow_from_directory(
     test_directory,
     target_size=(dim, dim),
-    batch_size=32,
+    batch_size=64,
     class_mode='categorical'
 )
 
@@ -177,13 +177,14 @@ x = Dropout(0.5)(x)
 x = tf.keras.layers.Flatten()(x)
 #x = tf.keras.layers.Dense(1024, activation='relu')(x)
 x = tf.keras.layers.Dense(512, activation='relu')(x)
+x = Dropout(0.5)(x)
 output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
 # Create the new model
 model = Model(inputs=pretrained_model.input, outputs=output)
 model.summary()
 
-model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.95,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.97,t2=1.0), metrics=['accuracy'])
 
 
 
