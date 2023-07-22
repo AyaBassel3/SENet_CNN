@@ -152,7 +152,7 @@ for layer in pretrained_model.layers:
 
 # Extract the feature extraction layers
 
-feature_extractor = pretrained_model.layers[-230].output
+feature_extractor = pretrained_model.layers[-1].output
 
 # Freeze the feature extraction layers
 feature_extractor.trainable = False
@@ -176,7 +176,7 @@ x = Dropout(0.5)(x)
 #                                tf.keras.layers.GlobalAveragePooling2D()(x)])
 x = tf.keras.layers.Flatten()(x)
 #x = tf.keras.layers.Dense(1024, activation='relu')(x)
-x = tf.keras.layers.Dense(128, activation='relu')(x)
+x = tf.keras.layers.Dense(512, activation='relu')(x)
 output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
 # Create the new model
