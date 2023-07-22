@@ -38,7 +38,7 @@ class BiTemperedWrapper:
         return bi_tempered_logistic_loss(activations, labels, self.t1,  self.t2)
 
 
-dim=300
+dim=224
 train_directory = '/home/pg2022/SENet_CNN/data/data/train'
 test_directory = '/home/pg2022/SENet_CNN/data/data/test'
 
