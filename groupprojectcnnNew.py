@@ -128,6 +128,12 @@ train_datagen = ImageDataGenerator(
     brightness_range=[0.7, 1.3],
     fill_mode='nearest'
 )
+train_generator = train_datagen.flow_from_directory(
+    train_directory,
+    target_size=(dim, dim),
+    batch_size=64,
+    class_mode='categorical'
+)
 
 def squeeze_excite_block2D(filters, input):
     se = tf.keras.layers.GlobalAveragePooling2D()(input)
