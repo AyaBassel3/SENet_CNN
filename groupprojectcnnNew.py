@@ -204,6 +204,8 @@ history1 = model.fit(
     callbacks=[checkpoint3]
 )
 model.load_weights('best_AdaptedSENet_model')
+scores = model.evaluate(test_generator)
+print (scores)
 model.compile()
 model.save("./fullAdaptedSENetNetmodel.keras")
 scores = model.evaluate(test_generator)
