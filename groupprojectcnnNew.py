@@ -138,7 +138,7 @@ train_generator = train_datagen.flow_from_directory(
 def squeeze_excite_block2D(filters, input):
     se = tf.keras.layers.GlobalAveragePooling2D()(input)
     se = tf.keras.layers.Reshape((1, filters))(se)
-    se = tf.keras.layers.Dense(filters * 4, activation='relu')(se)
+    se = tf.keras.layers.Dense(filters * 8, activation='relu')(se)
     se = tf.keras.layers.Dense(filters, activation='sigmoid')(se)
     se = tf.keras.layers.multiply([input, se])
     return se
