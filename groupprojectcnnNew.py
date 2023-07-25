@@ -181,6 +181,7 @@ x = Dropout(0.5)(x)
 #x = tf.keras.layers.concatenate([tf.keras.layers.GlobalMaxPooling2D()(x),
 #                                tf.keras.layers.GlobalAveragePooling2D()(x)])
 x = tf.keras.layers.Flatten()(x)
+x = tf.keras.layers.Dense(4096, activation='relu')(x)
 x = tf.keras.layers.Dense(1024, activation='relu')(x)
 x = tf.keras.layers.Dense(512, activation='relu')(x)
 x = tf.keras.layers.Dense(128, activation='relu')(x)
@@ -191,7 +192,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 model.summary()
 
-model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.99,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.98), loss=BiTemperedWrapper(t1=0.99,t2=1.0), metrics=['accuracy', keras.metrics.TopKCategoricalAccuracy(k=2)])
 
 
 
