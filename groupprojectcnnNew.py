@@ -149,7 +149,6 @@ checkpoint3 = ModelCheckpoint('./best_AdaptedSENet_model',
     save_best_only=True)
 
 #saved_model_path = "./fullDenseNetmodel.keras"
-pretrained_model =  DenseNet169(weights='imagenet', include_top=False, input_shape=(dim, dim, 3))
 #pretrained_model = model
 scores = pretrained_model.evaluate(test_generator)
 print ("pretrained_model:  ")
