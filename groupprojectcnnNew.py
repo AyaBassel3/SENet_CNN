@@ -108,7 +108,7 @@ model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.97,t2=1.0
 #)
 
 
-model.load_weights('best_DenseNet_model64')
+#model.load_weights('best_DenseNet_model64')
 scores = model.evaluate(test_generator)
 print (scores)
 #model.compile()
@@ -149,19 +149,20 @@ checkpoint3 = ModelCheckpoint('./best_AdaptedSENet_model',
     save_best_only=True)
 
 #saved_model_path = "./fullDenseNetmodel.keras"
-pretrained_model = model
+pretrained_model =  DenseNet169(weights='imagenet', include_top=False, input_shape=(dim, dim, 3))
+#pretrained_model = model
 scores = pretrained_model.evaluate(test_generator)
 print ("pretrained_model:  ")
 print (scores)
 for layer in pretrained_model.layers:
-    layer.trainable = False
+    layer.trainable = True
 
 # Extract the feature extraction layers
 
 feature_extractor = pretrained_model.layers[-3].output
 
 # Freeze the feature extraction layers
-feature_extractor.trainable = False
+feature_extractor.trainable = True
 
 filters=256
 x = Dropout(0.9)(feature_extractor)
