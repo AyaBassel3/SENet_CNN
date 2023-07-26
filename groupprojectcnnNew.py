@@ -108,7 +108,7 @@ model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.97,t2=1.0
 #)
 
 
-#model.load_weights('best_DenseNet_model64')
+model.load_weights('best_DenseNet_model64')
 scores = model.evaluate(test_generator)
 print (scores)
 #model.compile()
@@ -156,14 +156,14 @@ scores = pretrained_model.evaluate(test_generator)
 print ("pretrained_model:  ")
 print (scores)
 for layer in pretrained_model.layers:
-    layer.trainable = True
+    layer.trainable = False
 
 # Extract the feature extraction layers
 
 feature_extractor = pretrained_model.layers[-3].output
 
 # Freeze the feature extraction layers
-feature_extractor.trainable = True
+feature_extractor.trainable = False
 
 filters=256
 x = Dropout(0.9)(feature_extractor)
@@ -183,7 +183,7 @@ x = Dropout(0.5)(x)
 #x = tf.keras.layers.concatenate([tf.keras.layers.GlobalMaxPooling2D()(x),
 #                                tf.keras.layers.GlobalAveragePooling2D()(x)])
 x = tf.keras.layers.Flatten()(x)
-x = tf.keras.layers.Dense(4096, activation='relu')(x)
+#x = tf.keras.layers.Dense(4096, activation='relu')(x)
 x = tf.keras.layers.Dense(1024, activation='relu')(x)
 x = tf.keras.layers.Dense(512, activation='relu')(x)
 x = tf.keras.layers.Dense(128, activation='relu')(x)
@@ -194,7 +194,7 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 model.summary()
 
-model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.99,t2=1.0), metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.95), loss=BiTemperedWrapper(t1=1.0,t2=1.0), metrics=['accuracy'])
 
 
 
