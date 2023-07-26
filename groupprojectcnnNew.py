@@ -150,6 +150,8 @@ checkpoint3 = ModelCheckpoint('./best_AdaptedSENet_model',
 
 #saved_model_path = "./fullDenseNetmodel.keras"
 #pretrained_model = model
+pretrained_model.compile(optimizer=SGD(momentum=0.9), loss=BiTemperedWrapper(t1=0.97,t2=1.0), metrics=['accuracy'])
+
 scores = pretrained_model.evaluate(test_generator)
 print ("pretrained_model:  ")
 print (scores)
