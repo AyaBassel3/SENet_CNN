@@ -187,7 +187,7 @@ x = tf.keras.layers.Flatten()(x)
 #x = tf.keras.layers.Dense(1024, activation='relu')(x)
 x = tf.keras.layers.Dense(512, activation='relu')(x)
 x = Dropout(0.5)(x)
-x = tf.keras.layers.Dense(128, activation='relu')(x)
+#x = tf.keras.layers.Dense(128, activation='relu')(x)
 output = tf.keras.layers.Dense(15, activation='softmax')(x)
 
 # Create the new model
