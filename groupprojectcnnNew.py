@@ -201,7 +201,7 @@ model.compile(optimizer=SGD(momentum=0.95), loss=BiTemperedWrapper(t1=0.95,t2=1.
 history1 = model.fit(
     train_generator,
     steps_per_epoch=len(train_generator),
-    epochs=500,
+    epochs=700,
     validation_data=test_generator,
     validation_steps=len(test_generator),
     callbacks=[checkpoint3]
