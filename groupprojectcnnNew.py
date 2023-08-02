@@ -194,8 +194,8 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 model = Model(inputs=pretrained_model.input, outputs=output)
 model.summary()
 
-#model.compile(optimizer=SGD(momentum=0.93), loss=BiTemperedWrapper(t1=0.97,t2=1.0), metrics=['accuracy'])
-model.compile(optimizer=SGD(momentum=0.93),  loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=SGD(momentum=0.93), loss=BiTemperedWrapper(t1=0.97,t2=1.0), metrics=['accuracy'])
+#model.compile(optimizer=SGD(momentum=0.93),  loss='categorical_crossentropy', metrics=['accuracy'])
 
 
 
