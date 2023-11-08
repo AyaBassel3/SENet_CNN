@@ -23,6 +23,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam, SGD
 from tensorflow.keras.utils import to_categorical
 from loss import _internal_bi_tempered_logistic_loss as bi_tempered_logistic_loss
+import datetime
 
 
 class BiTemperedWrapper:
