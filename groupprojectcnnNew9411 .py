@@ -193,6 +193,8 @@ output = tf.keras.layers.Dense(15, activation='softmax')(x)
 # Create the new model
 model = Model(inputs=pretrained_model.input, outputs=output)
 model.summary()
+log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
 model.compile(optimizer=SGD(momentum=0.93), loss=BiTemperedWrapper(t1=0.97,t2=1.0), metrics=['accuracy'])
 
@@ -201,10 +203,10 @@ model.compile(optimizer=SGD(momentum=0.93), loss=BiTemperedWrapper(t1=0.97,t2=1.
 history1 = model.fit(
     train_generator,
     steps_per_epoch=len(train_generator),
-    epochs=500,
+    epochs=300,
     validation_data=test_generator,
     validation_steps=len(test_generator),
-    callbacks=[checkpoint3]
+    callbacks=[checkpoint3, tensorboard_callback]
 )
 model.load_weights('best_AdaptedSENet_model')
 scores = model.evaluate(test_generator)
